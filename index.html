@@ -138,6 +138,7 @@
     .filter-buttons .cat-b { background-color: #357ec7; }
     .filter-buttons .cat-c { background-color: #c0392b; }
     .filter-buttons .cat-d { background-color: #c0392b; }
+    .filter-buttons .cat-e { background-color: #c0392b; }
 
     .card {
       background-color: #fff;
@@ -175,6 +176,8 @@
     .cat-b { background-color: #357ec7; color: white; }
     .cat-c { background-color: #c0392b; color: white; }
     .cat-d { background-color: #c0392b; color: white; }
+    .cat-e { background-color: #c0392b; color: white; }
+
 
     .pagination {
       text-align: center;
@@ -232,6 +235,7 @@
       <button class="cat-b" onclick="filtrar('Categoria B')">Categoria B</button>
       <button class="cat-c" onclick="filtrar('Categoria C')">Categoria C</button>
       <button class="cat-d" onclick="filtrar('Categoria D')">Categoria D</button>
+      <button class="cat-e" onclick="filtrar('Categoria E')">Categoria E</button>
     </div>
 
     <div id="posts-container"></div>
@@ -273,12 +277,16 @@
     categoria: "Categoria B"
   },
      {
-    titulo: "Ecorruptor",
+    titulo: "Ecorruptor D",
     conteudo: "Infesta ambientes naturais, convertendo biomassa em estruturas biomecânicas. Nível de ameaça elevado.",
     categoria: "Categoria D"
   }
-];
-
+],
+{
+    titulo: "Ecorruptor E",
+    conteudo: "Infesta ambientes naturais, convertendo biomassa em estruturas biomecânicas. Nível de ameaça elevado.",
+    categoria: "Categoria E"
+  };
 
     let paginaAtual = 1;
     let categoriaFiltro = 'todos';
