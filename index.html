@@ -243,11 +243,34 @@
 
   <script>
     const postsPorPagina = 3;
-    const posts = Array.from({ length: 15 }, (_, i) => ({
-      titulo: `Post ${i + 1}`,
-      conteudo: `Conteúdo detalhado do post número ${i + 1}.`,
-      categoria: ['Categoria A', 'Categoria B', 'Categoria C'][i % 3]
-    }));
+   const posts = [
+  {
+    titulo: "Aberração das Sombras",
+    conteudo: "Criatura composta de pura escuridão, detectada apenas por sensores térmicos. Extremamente ágil e letal.",
+    categoria: "Categoria A"
+  },
+  {
+    titulo: "Larva Transdimensional",
+    conteudo: "Uma forma de vida larval que se alimenta de tempo e memória. Evite contato visual prolongado.",
+    categoria: "Categoria B"
+  },
+  {
+    titulo: "Carniçal Violeta",
+    conteudo: "Possui uma toxina que induz alucinações. Os registros indicam que se comunica por padrões de luz pulsante.",
+    categoria: "Categoria C"
+  },
+  {
+    titulo: "Cão das Criptas",
+    conteudo: "Um predador noturno que caça em matilhas. Vem de outra camada dimensional e fareja pensamentos ansiosos.",
+    categoria: "Categoria A"
+  },
+  {
+    titulo: "Ecorruptor",
+    conteudo: "Infesta ambientes naturais, convertendo biomassa em estruturas biomecânicas. Nível de ameaça elevado.",
+    categoria: "Categoria B"
+  }
+];
+
 
     let paginaAtual = 1;
     let categoriaFiltro = 'todos';
