@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P.C.I.P. - Posts</title>
+  <title>P.C.I.P.</title>
   <style>
     * {
       box-sizing: border-box;
@@ -96,6 +95,7 @@
 
       ul.menu.expanded {
         max-height: 500px;
+        overflow-y: auto;
       }
 
       ul.menu li a {
@@ -117,6 +117,26 @@
       margin-bottom: 18px;
       font-size: 1.4rem;
     }
+
+    .filter-buttons {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .filter-buttons button {
+      margin: 0 6px;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      cursor: pointer;
+      color: white;
+    }
+
+    .filter-buttons .all { background-color: #555; }
+    .filter-buttons .cat-a { background-color: #3c9a3c; }
+    .filter-buttons .cat-b { background-color: #357ec7; }
+    .filter-buttons .cat-c { background-color: #c0392b; }
 
     .card {
       background-color: #fff;
@@ -140,6 +160,19 @@
     .card.expanded .card-content {
       display: block;
     }
+
+    .category {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 0.85rem;
+      font-weight: bold;
+      margin-bottom: 8px;
+    }
+
+    .cat-a { background-color: #3c9a3c; color: white; }
+    .cat-b { background-color: #357ec7; color: white; }
+    .cat-c { background-color: #c0392b; color: white; }
 
     .pagination {
       text-align: center;
@@ -169,34 +202,41 @@
     }
   </style>
 </head>
-
 <body>
   <header>
     <h1>P.C.I.P.</h1>
     <nav>
       <button aria-label="Abrir menu" class="menu-button" id="menuToggle">&#9776;</button>
       <ul class="menu" id="menu">
-        <li><a href="P.C.I.P./index/home">Página Inicial</a></li>
-        <li><a href="/index/introduction">Introdução</a></li>
+        <li><a href="#">Página Inicial</a></li>
+        <li><a href="#">Introdução</a></li>
         <li><a href="#">Elementos</a></li>
-        <li><a href="/index/bestiary">Criaturas</a></li>
+        <li><a href="#">Criaturas</a></li>
         <li><a href="#">Estimativas Técnicas</a></li>
         <li><a href="#">Invocação</a></li>
         <li><a href="#">Manifestações</a></li>
-        <li><a href="/index/contact">Contato</a></li>
-        <li><a href="/index.html">Sair</a></li>
+        <li><a href="#">Contato</a></li>
+        <li><a href="#">Sair</a></li>
       </ul>
     </nav>
   </header>
 
   <main>
-    <h2 class="section-title">Posts</h2>
+    <h2 class="section-title">Bestiário</h2>
+
+    <div class="filter-buttons">
+      <button class="all" onclick="filtrar('todos')">Todos</button>
+      <button class="cat-a" onclick="filtrar('Categoria A')">Categoria A</button>
+      <button class="cat-b" onclick="filtrar('Categoria B')">Categoria B</button>
+      <button class="cat-c" onclick="filtrar('Categoria C')">Categoria C</button>
+    </div>
+
     <div id="posts-container"></div>
     <div class="pagination" id="pagination"></div>
   </main>
 
   <footer>
-    <a href="/index/security" style="color: inherit; text-decoration: none;">
+    <a href="#" style="color: inherit; text-decoration: none;">
       &copy; 2025 P.C.I.P. - Direitos reservados
     </a>
   </footer>
@@ -205,30 +245,45 @@
     const postsPorPagina = 3;
     const posts = Array.from({ length: 15 }, (_, i) => ({
       titulo: `Post ${i + 1}`,
-      conteudo: `Conteúdo detalhado do post número ${i + 1}.`
+      conteudo: `Conteúdo detalhado do post número ${i + 1}.`,
+      categoria: ['Categoria A', 'Categoria B', 'Categoria C'][i % 3]
     }));
 
     let paginaAtual = 1;
+    let categoriaFiltro = 'todos';
 
     function renderizarPosts() {
       const inicio = (paginaAtual - 1) * postsPorPagina;
+      const filtrados = categoriaFiltro === 'todos'
+        ? posts
+        : posts.filter(p => p.categoria === categoriaFiltro);
+
       const fim = inicio + postsPorPagina;
-      const postsVisiveis = posts.slice(inicio, fim);
+      const visiveis = filtrados.slice(inicio, fim);
 
       const container = document.getElementById('posts-container');
       container.innerHTML = '';
 
-      postsVisiveis.forEach(post => {
+      visiveis.forEach(post => {
         const div = document.createElement('div');
         div.className = 'card';
-        div.innerHTML = `<h3>${post.titulo}</h3><div class="card-content"><p>${post.conteudo}</p></div>`;
+        const categoriaClass = post.categoria.toLowerCase().replace(' ', '-');
+        div.innerHTML = `
+          <span class="category ${categoriaClass}">${post.categoria}</span>
+          <h3>${post.titulo}</h3>
+          <div class="card-content"><p>${post.conteudo}</p></div>
+        `;
         div.onclick = () => div.classList.toggle('expanded');
         container.appendChild(div);
       });
     }
 
     function renderizarPaginacao() {
-      const totalPaginas = Math.ceil(posts.length / postsPorPagina);
+      const totalFiltrados = categoriaFiltro === 'todos'
+        ? posts.length
+        : posts.filter(p => p.categoria === categoriaFiltro).length;
+
+      const totalPaginas = Math.ceil(totalFiltrados / postsPorPagina);
       const paginacao = document.getElementById('pagination');
       paginacao.innerHTML = '';
 
@@ -269,7 +324,11 @@
       renderizarPaginacao();
     }
 
-    atualizar();
+    function filtrar(categoria) {
+      categoriaFiltro = categoria;
+      paginaAtual = 1;
+      atualizar();
+    }
 
     document.getElementById('menuToggle').addEventListener('click', () => {
       const menu = document.getElementById('menu');
@@ -286,7 +345,8 @@
         menuToggle.setAttribute('aria-label', 'Abrir menu');
       }
     });
+
+    atualizar();
   </script>
 </body>
-
 </html>
