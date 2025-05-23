@@ -150,6 +150,16 @@
       color: white;
     }
 
+      .filtro-categorias button[data-categoria="Categoria D"] {
+      background-color: #8e44ad;
+      color: white;
+    }
+
+    .filtro-categorias button[data-categoria="Categoria E"] {
+      background-color: #d35400;
+      color: white;
+    }
+
     @media (max-width: 768px) {
       .filtro-categorias {
         flex-direction: column;
@@ -240,6 +250,8 @@
       <button data-categoria="Categoria A">Categoria A</button>
       <button data-categoria="Categoria B">Categoria B</button>
       <button data-categoria="Categoria C">Categoria C</button>
+      <button data-categoria="Categoria D">Categoria D</button>
+      <button data-categoria="Categoria E">Categoria E</button>
     </div>
     <div id="posts-container"></div>
     <div class="pagination" id="pagination"></div>
@@ -259,7 +271,11 @@
       { titulo: "Post 3", conteudo: "Conteúdo do post 3", categoria: "Categoria C" },
       { titulo: "Post 4", conteudo: "Conteúdo do post 4", categoria: "Categoria A" },
       { titulo: "Post 5", conteudo: "Conteúdo do post 5", categoria: "Categoria B" },
-      { titulo: "Post 6", conteudo: "Conteúdo do post 6", categoria: "Categoria C" }
+      { titulo: "Post 6", conteudo: "Conteúdo do post 6", categoria: "Categoria C" },
+      { titulo: "Post 3", conteudo: "Conteúdo do post 3", categoria: "Categoria D" },
+      { titulo: "Post 4", conteudo: "Conteúdo do post 4", categoria: "Categoria D" },
+      { titulo: "Post 5", conteudo: "Conteúdo do post 5", categoria: "Categoria E" },
+      { titulo: "Post 6", conteudo: "Conteúdo do post 6", categoria: "Categoria D" },
     ];
 
     let paginaAtual = 1;
