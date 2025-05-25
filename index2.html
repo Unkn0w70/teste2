@@ -1,357 +1,119 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P.C.I.P.</title>
+  <title>P.C.I.P. - Login</title>
   <style>
     * {
       box-sizing: border-box;
     }
-
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       background-color: #d1b082;
       color: #333;
-    }
-
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    header {
-      background-color: #3f2c28;
-      color: white;
-      padding: 12px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: center;
+      height: 100vh;
     }
-
-    header h1 {
-      font-weight: 700;
-      margin: 0;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
+    .login-container {
+      background-color: #fff3e6;
+      padding: 30px 25px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      width: 100%;
+      max-width: 400px;
     }
-
-    nav {
-      position: relative;
-    }
-
-    .menu-button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.6rem;
-      cursor: pointer;
-      display: none;
-    }
-
-    ul.menu {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
-
-    ul.menu li a {
-      font-weight: 600;
-      padding: 8px 6px;
-      display: inline-block;
-    }
-
-    ul.menu li:hover,
-    ul.menu li a:hover {
-      background-color: #18120a;
-      border-radius: 3px;
-    }
-
-    @media (max-width: 768px) {
-      .menu-button {
-        display: block;
-      }
-
-      ul.menu {
-        flex-direction: column;
-        background-color: #3f2c28;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 200px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-
-      ul.menu.expanded {
-        max-height: 500px;
-        overflow-y: auto;
-      }
-
-      ul.menu li a {
-        padding: 12px 16px;
-        border-bottom: 1px solid #000000;
-      }
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 20px auto 40px;
-      padding: 0 15px;
-    }
-
-    .section-title {
-      border-bottom: 3px solid #000000;
-      color: #000000;
-      font-weight: 700;
-      margin-bottom: 18px;
-      font-size: 1.4rem;
-    }
-
-    .filtro-categorias {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-   .filtro-categorias button {
-  padding: 8px 16px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  background-color: #3f2c28;
-  color: white;
-  transition: background-color 0.3s;
-}
-
-    @media (max-width: 768px) {
-      .filtro-categorias {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .filtro-categorias button {
-        width: 100%;
-        font-size: 1rem;
-      }
-    }
-
-    .card {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      padding: 16px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .card h3 {
+    .login-container h2 {
       margin-top: 0;
-    }
-
-    .card-content {
-      display: none;
-      margin-top: 10px;
-    }
-
-    .card.expanded .card-content {
-      display: block;
-    }
-
-    .pagination {
+      margin-bottom: 20px;
       text-align: center;
-      margin-top: 30px;
+      color: #3f2c28;
     }
-
-    .pagination button {
-      margin: 0 4px;
-      padding: 6px 10px;
+    .login-container label {
+      display: block;
+      margin-bottom: 6px;
+      font-weight: bold;
+    }
+    .login-container input[type="text"],
+    .login-container input[type="password"] {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 15px;
+      border: 1px solid #aaa;
+      border-radius: 5px;
+    }
+    .login-container button {
+      width: 100%;
+      padding: 10px;
       background-color: #3f2c28;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
+      font-weight: bold;
       cursor: pointer;
+      font-size: 1rem;
     }
-
-    .pagination button.active {
-      background-color: #000;
+    .login-container button:hover {
+      background-color: #2d1f1c;
     }
-
-    footer {
-      background-color: #222;
-      color: #ccc;
+    .error-message {
+      color: red;
       text-align: center;
-      padding: 15px 10px;
-      font-size: 0.85rem;
+      margin-bottom: 15px;
     }
   </style>
 </head>
-
 <body>
-  <header>
-    <h1>P.C.I.P.</h1>
-    <nav>
-      <button aria-label="Abrir menu" class="menu-button" id="menuToggle">&#9776;</button>
-      <ul class="menu" id="menu">
-        <li><a href="#">Página Inicial</a></li>
-        <li><a href="#">Introdução</a></li>
-        <li><a href="#">Elementos</a></li>
-        <li><a href="#">Criaturas</a></li>
-        <li><a href="#">Estimativas Técnicas</a></li>
-        <li><a href="#">Invocação</a></li>
-        <li><a href="#">Manifestações</a></li>
-        <li><a href="#">Contato</a></li>
-        <li><a href="#">Sair</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <h2 class="section-title">Bestiário</h2>
-    <div class="filtro-categorias">
-      <button data-categoria="todos">Todos</button>
-      <button data-categoria="Conhecimento">Conhecimento</button>
-      <button data-categoria="Energia">Energia</button>
-      <button data-categoria="Morte">Morte</button>
-      <button data-categoria="Sangue">Sangue</button>
-      <button data-categoria="Medo">Medo</button>
-    </div>
-    <div id="posts-container"></div>
-    <div class="pagination" id="pagination"></div>
-  </main>
-
-  <footer>
-    <a href="#" style="color: inherit; text-decoration: none;">
-      &copy; 2025 P.C.I.P. - Direitos reservados
-    </a>
-  </footer>
+  <div class="login-container">
+    <h2>Login - P.C.I.P.</h2>
+    <div id="error" class="error-message"></div>
+    <form onsubmit="return loginUser(event)">
+      <label for="username">Usuário</label>
+      <input type="text" id="username" required />
+      <label for="password">Senha</label>
+      <input type="password" id="password" required />
+      <button type="submit">Entrar</button>
+    </form>
+  </div>
 
   <script>
-    const postsPorPagina = 3;
-    const posts = [
-      { titulo: "Post 1", conteudo: "Conteúdo do post 1", categoria: "Conhecimento" },
-      { titulo: "Post 2", conteudo: "Conteúdo do post 2", categoria: "Categoria B" },
-      { titulo: "Post 3", conteudo: "Conteúdo do post 3", categoria: "Categoria C" },
-      { titulo: "Post 4", conteudo: "Conteúdo do post 4", categoria: "Conhecimento" },
-      { titulo: "Post 5", conteudo: "Conteúdo do post 5", categoria: "Categoria B" },
-      { titulo: "Post 6", conteudo: "Conteúdo do post 6", categoria: "Categoria C" },
-      { titulo: "Post 3", conteudo: "Conteúdo do post 3", categoria: "Conhecimento" },
-      { titulo: "Post 4", conteudo: "Conteúdo do post 4", categoria: "Categoria D" },
-      { titulo: "Post 5", conteudo: "Conteúdo do post 5", categoria: "Categoria E" },
-      { titulo: "Post 6", conteudo: "Conteúdo do post 6", categoria: "Categoria D" },
+    const users = [
+      { username: "admin", password: "1234", redirect: "" },
+      { username: "usuario1", password: "senha1", redirect: "usuario1/home.html" },
+      { username: "agente_zumbi", password: "contencao2025", redirect: "zumbi/missao.html" }
     ];
 
-    let paginaAtual = 1;
-    let categoriaAtual = "todos";
+    function loginUser(event) {
+      event.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const errorDiv = document.getElementById('error');
 
-    function renderizarPosts() {
-      const container = document.getElementById("posts-container");
-      container.innerHTML = "";
+      const user = users.find(u => u.username === username && u.password === password);
 
-      const filtrados = categoriaAtual === "todos"
-        ? posts
-        : posts.filter(p => p.categoria === categoriaAtual);
-
-      const inicio = (paginaAtual - 1) * postsPorPagina;
-      const fim = inicio + postsPorPagina;
-      const visiveis = filtrados.slice(inicio, fim);
-
-      visiveis.forEach(post => {
-        const div = document.createElement("div");
-        div.className = "card";
-        div.innerHTML = `<h3>${post.titulo} <span style="float:right;font-size:0.8rem;color:#666">${post.categoria}</span></h3><div class="card-content"><p>${post.conteudo}</p></div>`;
-        div.onclick = () => div.classList.toggle("expanded");
-        container.appendChild(div);
-      });
-    }
-
-    function renderizarPaginacao() {
-      const paginacao = document.getElementById("pagination");
-      paginacao.innerHTML = "";
-
-      const filtrados = categoriaAtual === "todos"
-        ? posts
-        : posts.filter(p => p.categoria === categoriaAtual);
-
-      const totalPaginas = Math.ceil(filtrados.length / postsPorPagina);
-
-      if (paginaAtual > 1) {
-        const btnAnterior = document.createElement("button");
-        btnAnterior.textContent = "Anterior";
-        btnAnterior.onclick = () => {
-          paginaAtual--;
-          atualizar();
-        };
-        paginacao.appendChild(btnAnterior);
-      }
-
-      for (let i = 1; i <= totalPaginas; i++) {
-        const btn = document.createElement("button");
-        btn.textContent = i;
-        if (i === paginaAtual) btn.classList.add("active");
-        btn.onclick = () => {
-          paginaAtual = i;
-          atualizar();
-        };
-        paginacao.appendChild(btn);
-      }
-
-      if (paginaAtual < totalPaginas) {
-        const btnProximo = document.createElement("button");
-        btnProximo.textContent = "Próximo";
-        btnProximo.onclick = () => {
-          paginaAtual++;
-          atualizar();
-        };
-        paginacao.appendChild(btnProximo);
+      if (user) {
+        salvarLogDeAcesso(username);
+        window.location.href = user.redirect;
+      } else {
+        errorDiv.textContent = "Usuário ou senha inválidos.";
       }
     }
 
-    function atualizar() {
-      renderizarPosts();
-      renderizarPaginacao();
-    }
+    function salvarLogDeAcesso(username) {
+      const logs = JSON.parse(localStorage.getItem("logins") || "[]");
 
-    document.querySelectorAll(".filtro-categorias button").forEach(btn => {
-      btn.onclick = () => {
-        categoriaAtual = btn.dataset.categoria;
-        paginaAtual = 1;
-        atualizar();
+      const novoLog = {
+        usuario: username,
+        dataHora: new Date().toLocaleString(),
+        navegador: navigator.userAgent
       };
-    });
 
-    atualizar();
-
-    document.getElementById('menuToggle').addEventListener('click', () => {
-      const menu = document.getElementById('menu');
-      menu.classList.toggle('expanded');
-      const expanded = menu.classList.contains('expanded');
-      menuToggle.setAttribute('aria-label', expanded ? 'Fechar menu' : 'Abrir menu');
-    });
-
-    document.addEventListener('click', (event) => {
-      const menu = document.getElementById('menu');
-      const menuToggle = document.getElementById('menuToggle');
-      if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
-        menu.classList.remove('expanded');
-        menuToggle.setAttribute('aria-label', 'Abrir menu');
-      }
-    });
+      logs.push(novoLog);
+      localStorage.setItem("logins", JSON.stringify(logs));
+    }
   </script>
 </body>
-
 </html>
