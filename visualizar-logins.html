@@ -46,27 +46,84 @@
     .clear-btn:hover {
       background-color: #822;
     }
+    .password-container {
+      text-align: center;
+      margin-top: 100px;
+    }
+    .password-container input {
+      padding: 10px;
+      width: 250px;
+      border-radius: 5px;
+      border: 1px solid #999;
+    }
+    .password-container button {
+      padding: 10px 15px;
+      margin-left: 10px;
+      background-color: #3f2c28;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    .error-message {
+      color: red;
+      margin-top: 10px;
+    }
   </style>
 </head>
 <body>
-  <h2>Logs de Acesso - P.C.I.P.</h2>
-  <table id="logTable">
-    <thead>
-      <tr>
-        <th>Usuário</th>
-        <th>Data/Hora</th>
-        <th>Navegador</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
-  <button class="clear-btn" onclick="limparLogs()">Limpar Logs</button>
+  <div id="authContainer" class="password-container">
+    <h2>🔐 Acesso restrito aos Logs</h2>
+    <input type="password" id="passwordInput" placeholder="Digite a senha de acesso" />
+    <button onclick="verificarSenha()">Entrar</button>
+    <div id="errorMsg" class="error-message"></div>
+  </div>
+
+  <div id="logContainer" style="display:none;">
+    <h2>Logs de Acesso - P.C.I.P.</h2>
+    <table id="logTable">
+      <thead>
+        <tr>
+          <th>Usuário</th>
+          <th>Data/Hora</th>
+          <th>Navegador</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+    <button class="clear-btn" onclick="limparLogs()">Limpar Logs</button>
+  </div>
 
   <script>
+    const senhaHashAutorizada = "0b8e95df5571a2cfbb89a58d83b29783d0fd4d09c28ea9bbcc3a5c3aebcb21f4";
+
+    async function gerarHash(texto) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(texto);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    async function verificarSenha() {
+      const senhaDigitada = document.getElementById("passwordInput").value;
+      const erro = document.getElementById("errorMsg");
+      erro.textContent = "";
+
+      const hash = await gerarHash(senhaDigitada);
+      if (hash === senhaHashAutorizada) {
+        document.getElementById("authContainer").style.display = "none";
+        document.getElementById("logContainer").style.display = "block";
+        carregarLogs();
+      } else {
+        erro.textContent = "Senha incorreta!";
+      }
+    }
+
     function carregarLogs() {
       const logs = JSON.parse(localStorage.getItem("logins") || "[]");
       const tbody = document.querySelector("#logTable tbody");
-      tbody.innerHTML = ""; // Limpa antes de preencher
+      tbody.innerHTML = "";
 
       if (logs.length === 0) {
         const row = document.createElement("tr");
@@ -92,8 +149,6 @@
         carregarLogs();
       }
     }
-
-    carregarLogs();
   </script>
 </body>
 </html>
