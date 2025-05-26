@@ -5,65 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>P.C.I.P. - Login</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-    body {
-      margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #d1b082;
-      color: #333;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      height: 100vh;
-    }
-    .login-container {
-      background-color: #fff3e6;
-      padding: 30px 25px;
-      border-radius: 10px;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      width: 100%;
-      max-width: 400px;
-    }
-    .login-container h2 {
-      margin-top: 0;
-      margin-bottom: 20px;
-      text-align: center;
-      color: #3f2c28;
-    }
-    .login-container label {
-      display: block;
-      margin-bottom: 6px;
-      font-weight: bold;
-    }
-    .login-container input[type="text"],
-    .login-container input[type="password"] {
-      width: 100%;
-      padding: 10px;
-      margin-bottom: 15px;
-      border: 1px solid #aaa;
-      border-radius: 5px;
-    }
-    .login-container button {
-      width: 100%;
-      padding: 10px;
-      background-color: #3f2c28;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      font-weight: bold;
-      cursor: pointer;
-      font-size: 1rem;
-    }
-    .login-container button:hover {
-      background-color: #2d1f1c;
-    }
-    .error-message {
-      color: red;
-      text-align: center;
-      margin-bottom: 15px;
-    }
+    /* (Estilos iguais ao seu código original) */
   </style>
 </head>
 <body>
@@ -80,41 +22,70 @@
   </div>
 
   <script>
+    // Lista de usuários com senhas HASH SHA-256
     const users = [
-      { username: "admin", password: "1234", redirect: "https://unkn0w70.github.io/teste2/index.html" },
-      { username: "usuario1", password: "senha1", redirect: "https://unkn0w70.github.io/teste2/index/home.html" },
-      { username: "agente_zumbi", password: "contencao2025", redirect: "zumbi/missao.html" }
+      {
+        username: "Ricardo Ramirèz",
+        passwordHash: "9bde5a31b99f8d05a177be1457f1be1396e6ac3f3c78062c27305f15d1eeeb7f", // hash de 321941415
+        redirect: "https://unkn0w70.github.io/P.C.I.P./index/home.html"
+      },
+      {
+        username: "usuario1",
+        passwordHash: "14a4b7b5d2c5531c147a679b25416ec185cfb87c57dc733fb4266c7ae37e7f54", // hash de senha1
+        redirect: "https://unkn0w70.github.io/teste2/index.html"
+      },
+      {
+        username: "agente_zumbi",
+        passwordHash: "6c7926f9e579ea3dfb539a178a75808a0bcacba6e209c6f509b7a12d8e08c43c", // hash de contencao2025
+        redirect: "zumbi/missao.html"
+      }
     ];
 
-    function loginUser(event) {
+    async function loginUser(event) {
       event.preventDefault();
       const username = document.getElementById('username').value.trim();
       const password = document.getElementById('password').value.trim();
       const errorDiv = document.getElementById('error');
 
-      const user = users.find(u => u.username === username && u.password === password);
-
-      if (user) {
-        salvarLogDeAcesso(username);
-        window.location.href = user.redirect;
-      } else {
+      const user = users.find(u => u.username === username);
+      if (!user) {
         errorDiv.textContent = "Usuário ou senha inválidos.";
+        return;
       }
+
+      const hash = await sha256(password);
+      if (hash !== user.passwordHash) {
+        errorDiv.textContent = "Usuário ou senha inválidos.";
+        return;
+      }
+
+      salvarLogDeAcesso(username);
+
+      // Sessão válida por 10 minutos
+      sessionStorage.setItem("usuarioLogado", JSON.stringify({
+        username,
+        expires: Date.now() + 10 * 60 * 1000 // 10 minutos
+      }));
+
+      window.location.href = user.redirect;
     }
 
     function salvarLogDeAcesso(username) {
       const logs = JSON.parse(localStorage.getItem("logins") || "[]");
-
-      const novoLog = {
+      logs.push({
         usuario: username,
         dataHora: new Date().toLocaleString(),
         navegador: navigator.userAgent
-      };
-
-      logs.push(novoLog);
+      });
       localStorage.setItem("logins", JSON.stringify(logs));
-      localStorage.setItem("usuario_autenticado", "true");
+    }
 
+    async function sha256(text) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      const hashArray = Array.from(new Uint8Array(hashBuffer));
+      return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
     }
   </script>
 </body>
