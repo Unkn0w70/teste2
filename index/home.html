@@ -331,7 +331,15 @@ timer {
   }
 
 </style>
+<script>
+  const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
 
+  if (!sessao.username || Date.now() > sessao.expires) {
+    sessionStorage.clear(); // revoga a sessão
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
+  }
+</script>
 </head>
 
 <body>
