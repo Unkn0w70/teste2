@@ -206,16 +206,41 @@
       font-size: 0.85rem;
     }
   </style>
-<script>
-  const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
+<script defer>
+    // Função para salvar no log
+    function salvarLogDeAcesso(username, evento) {
+      const logs = JSON.parse(localStorage.getItem("logins") || "[]");
+      const novoLog = {
+        usuario: username,
+        dataHora: new Date().toLocaleString(),
+        navegador: navigator.userAgent,
+        evento: evento || "login"
+      };
+      logs.push(novoLog);
+      localStorage.setItem("logins", JSON.stringify(logs));
+    }
 
-  if (!sessao.username || Date.now() > sessao.expires) {
-    sessionStorage.clear(); // revoga a sessão
-    alert("Sessão expirada. Faça login novamente.");
-    window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
-  }
-</script>
+    // Verificação da sessão
+    const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
+    if (!sessao.username || Date.now() > sessao.expires) {
+      if (sessao.username) {
+        salvarLogDeAcesso(sessao.username, "timeout");
+      }
+      sessionStorage.clear();
+      alert("Sessão expirada. Faça login novamente.");
+      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
+    }
 
+    // Função de logout (caso precise)
+    function logout() {
+      const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
+      if (sessao.username) {
+        salvarLogDeAcesso(sessao.username, "logout");
+      }
+      sessionStorage.clear();
+      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
+    }
+  </script>
 
 
 </head>
