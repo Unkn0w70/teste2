@@ -207,22 +207,15 @@
     }
   </style>
 <script>
-  const isAuthenticated = localStorage.getItem("usuario_autenticado") === "true";
-  const loginTime = parseInt(localStorage.getItem("login_time"), 10);
-  const tempoMaximo = 15 * 60 * 1000; // 1 minuto em milissegundos
+  const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
 
-  if (!isAuthenticated || isNaN(loginTime)) {
-    window.location.href = "https://unkn0w70.github.io/teste2/index.html";
-  } else {
-    const agora = new Date().getTime();
-    if (agora - loginTime > tempoMaximo) {
-      // Sessão expirou
-      localStorage.clear();
-      alert("Sua sessão expirou. Faça login novamente.");
-      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
-    }
+  if (!sessao.username || Date.now() > sessao.expires) {
+    sessionStorage.clear(); // revoga a sessão
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
   }
 </script>
+
 
 
 </head>
