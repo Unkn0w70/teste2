@@ -206,11 +206,24 @@
       font-size: 0.85rem;
     }
   </style>
-  <script>
-  if (localStorage.getItem("usuario_autenticado") !== "true") {
+<script>
+  const isAuthenticated = localStorage.getItem("usuario_autenticado") === "true";
+  const loginTime = parseInt(localStorage.getItem("login_time"), 10);
+  const tempoMaximo = 1 * 60 * 1000; // 1 minuto em milissegundos
+
+  if (!isAuthenticated || isNaN(loginTime)) {
     window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
+  } else {
+    const agora = new Date().getTime();
+    if (agora - loginTime > tempoMaximo) {
+      // Sessão expirou
+      localStorage.clear();
+      alert("Sua sessão expirou. Faça login novamente.");
+      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
+    }
   }
 </script>
+
 
 </head>
 <body>
