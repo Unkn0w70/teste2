@@ -209,7 +209,7 @@
 <script>
   const isAuthenticated = localStorage.getItem("usuario_autenticado") === "true";
   const loginTime = parseInt(localStorage.getItem("login_time"), 10);
-  const tempoMaximo = 1 * 60 * 1000; // 1 minuto em milissegundos
+  const tempoMaximo = 15 * 60 * 1000; // 1 minuto em milissegundos
 
   if (!isAuthenticated || isNaN(loginTime)) {
     window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
