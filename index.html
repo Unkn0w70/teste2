@@ -3,12 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P.C.I.P.</title>
+  <title>Documento | P.C.I.P.</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
+    /* Estilos básicos reaproveitados */
     body {
       margin: 0;
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -16,181 +13,81 @@
       color: #333;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    header {
+    header, footer {
       background-color: #3f2c28;
       color: white;
       padding: 12px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      font-weight: 700;
-      margin: 0;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-    }
-
-    nav {
-      position: relative;
-    }
-
-    .menu-button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.6rem;
-      cursor: pointer;
-      display: none;
-    }
-
-    ul.menu {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
-
-    ul.menu li a {
-      font-weight: 600;
-      padding: 8px 6px;
-      display: inline-block;
-    }
-
-    ul.menu li:hover,
-    ul.menu li a:hover {
-      background-color: #18120a;
-      border-radius: 3px;
-    }
-
-    @media (max-width: 768px) {
-      .menu-button {
-        display: block;
-      }
-
-      ul.menu {
-        flex-direction: column;
-        background-color: #3f2c28;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 200px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-
-      ul.menu.expanded {
-        max-height: 500px;
-        overflow-y: auto;
-      }
-
-      ul.menu li a {
-        padding: 12px 16px;
-        border-bottom: 1px solid #000000;
-      }
+      text-align: center;
     }
 
     main {
-      max-width: 1100px;
-      margin: 20px auto 40px;
-      padding: 0 15px;
+      max-width: 800px;
+      margin: 30px auto;
+      padding: 15px;
+      perspective: 1200px;
     }
 
-    .section-title {
-      border-bottom: 3px solid #000000;
-      color: #000000;
-      font-weight: 700;
-      margin-bottom: 18px;
-      font-size: 1.4rem;
+    .documento-container {
+      position: relative;
+      width: 100%;
+      height: 500px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
+      overflow: hidden;
+      transition: transform 1s;
+      transform-style: preserve-3d;
     }
 
-    .filter-buttons {
-      text-align: center;
-      margin-bottom: 20px;
+    .pagina {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      backface-visibility: hidden;
+      overflow-y: auto;
     }
 
-    .filter-buttons button {
-      margin: 0 6px;
-      padding: 6px 12px;
-      border: none;
-      border-radius: 4px;
-      font-weight: bold;
+    .pagina img {
+      max-width: 100%;
       cursor: pointer;
-      color: white;
+      border: 2px solid #3f2c28;
+      border-radius: 5px;
     }
 
-    .filter-buttons .all { background-color: #555; }
-    .filter-buttons .cat-a { background-color: #E4BC53; }
-    .filter-buttons .cat-b { background-color: #357ec7; }
-    .filter-buttons .cat-c { background-color: #c0392b; }
-    .filter-buttons .cat-d { background-color: #c0392b; }
-    .filter-buttons .cat-e { background-color: #c0392b; }
-
-    .card {
-      background-color: #fff;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-      padding: 16px;
-      margin-bottom: 20px;
-      cursor: pointer;
-      transition: all 0.3s ease;
+    .pagina.ampliada img {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      max-width: 90vw;
+      max-height: 90vh;
+      transform: translate(-50%, -50%);
+      z-index: 1001;
+      border: 4px solid white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.7);
     }
 
-    .card h3 {
-      margin-top: 0;
-    }
-
-    .card-content {
+    .overlay {
       display: none;
-      margin-top: 10px;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.6);
+      z-index: 1000;
     }
-
-    .card.expanded .card-content {
-      display: block;
-    }
-
-    .category {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 12px;
-      font-size: 0.85rem;
-      font-weight: bold;
-      margin-bottom: 8px;
-    }
-
-    .cat-a { background-color: #E4BC53; color: white; }
-    .cat-b { background-color: #357ec7; color: white; }
-    .cat-c { background-color: #c0392b; color: white; }
-    .cat-d { background-color: #c0392b; color: white; }
-    .cat-e { background-color: #c0392b; color: white; }
-
 
     .pagination {
+      margin-top: 20px;
       text-align: center;
-      margin-top: 30px;
     }
 
     .pagination button {
-      margin: 0 4px;
+      margin: 0 5px;
       padding: 6px 10px;
       background-color: #3f2c28;
       color: white;
       border: none;
-      border-radius: 4px;
+      border-radius: 5px;
       cursor: pointer;
     }
 
@@ -198,231 +95,111 @@
       background-color: #000;
     }
 
-    footer {
-      background-color: #222;
-      color: #ccc;
-      text-align: center;
-      padding: 15px 10px;
-      font-size: 0.85rem;
+    /* Animação de virada */
+    .virando {
+      animation: virar 0.8s ease-in-out;
+    }
+
+    @keyframes virar {
+      0% { transform: rotateY(0deg); }
+      100% { transform: rotateY(360deg); }
     }
   </style>
-<script defer>
-    // Função para salvar no log
-    function salvarLogDeAcesso(username, evento) {
-      const logs = JSON.parse(localStorage.getItem("logins") || "[]");
-      const novoLog = {
-        usuario: username,
-        dataHora: new Date().toLocaleString(),
-        navegador: navigator.userAgent,
-        evento: evento || "login"
-      };
-      logs.push(novoLog);
-      localStorage.setItem("logins", JSON.stringify(logs));
-    }
-
-    // Verificação da sessão
-    const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
-    if (!sessao.username || Date.now() > sessao.expires) {
-      if (sessao.username) {
-        salvarLogDeAcesso(sessao.username, "timeout");
-      }
-      sessionStorage.clear();
-      alert("Sessão expirada. Faça login novamente.");
-      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
-    }
-
-    // Função de logout (caso precise)
-    function logout() {
-      const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
-      if (sessao.username) {
-        salvarLogDeAcesso(sessao.username, "logout");
-      }
-      sessionStorage.clear();
-      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
-    }
-  </script>
-
-
 </head>
 <body>
   <header>
-    <h1>P.C.I.P.</h1>
-    <nav>
-      <button aria-label="Abrir menu" class="menu-button" id="menuToggle">&#9776;</button>
-      <ul class="menu" id="menu">
-        <li><a href="#">Página Inicial</a></li>
-        <li><a href="#">Introdução</a></li>
-        <li><a href="#">Elementos</a></li>
-        <li><a href="#">Criaturas</a></li>
-        <li><a href="#">Estimativas Técnicas</a></li>
-        <li><a href="#">Invocação</a></li>
-        <li><a href="#">Manifestações</a></li>
-        <li><a href="#">Contato</a></li>
-        <li><a href="#">Sair</a></li>
-      </ul>
-    </nav>
+    <h1>P.C.I.P. - Arquivo Classificado</h1>
   </header>
 
   <main>
-    <h2 class="section-title">Bestiário</h2>
-
-    <div class="filter-buttons">
-      <button class="all" onclick="filtrar('todos')">Todos</button>
-      <button class="cat-a" onclick="filtrar('Conhecimento')">Conhecimento</button>
-      <button class="cat-b" onclick="filtrar('Categoria B')">Categoria B</button>
-      <button class="cat-c" onclick="filtrar('Categoria C')">Categoria C</button>
-      <button class="cat-d" onclick="filtrar('Categoria D')">Categoria D</button>
-      <button class="cat-e" onclick="filtrar('Categoria E')">Categoria E</button>
+    <div class="documento-container" id="documento">
+      <div class="pagina" id="pagina-atual">
+        <!-- Conteúdo dinâmico aqui -->
+      </div>
     </div>
 
-    <div id="posts-container"></div>
-    <div class="pagination" id="pagination"></div>
+    <div class="pagination" id="paginacao"></div>
   </main>
 
   <footer>
-    <a href="#" style="color: inherit; text-decoration: none;">
-      &copy; 2025 P.C.I.P. - Direitos reservados
-    </a>
+    &copy; 2025 P.C.I.P. - Todos os direitos reservados
   </footer>
 
+  <div class="overlay" id="overlay"></div>
+
   <script>
-    const postsPorPagina = 3;
-   const posts = [
-  {
-    titulo: "Aberração das Sombras",
-    conteudo: "Criatura composta de pura escuridão, detectada apenas por sensores térmicos. Extremamente ágil e letal.",
-    categoria: "Conhecimento"
-  },
-  {
-    titulo: "Larva Transdimensional",
-    conteudo: "Uma forma de vida larval que se alimenta de tempo e memória. Evite contato visual prolongado.",
-    categoria: "Categoria B"
-  },
-  {
-    titulo: "Carniçal Violeta",
-    conteudo: "Possui uma toxina que induz alucinações. Os registros indicam que se comunica por padrões de luz pulsante.",
-    categoria: "Categoria C"
-  },
-  {
-    titulo: "Cão das Criptas",
-    conteudo: "Um predador noturno que caça em matilhas. Vem de outra camada dimensional e fareja pensamentos ansiosos.",
-    categoria: "Conhecimento"
-  },
-  {
-    titulo: "Ecorruptor",
-    conteudo: "Infesta ambientes naturais, convertendo biomassa em estruturas biomecânicas. Nível de ameaça elevado.",
-    categoria: "Categoria B"
-  },
-     {
-    titulo: "Ecorruptor D",
-    conteudo: "Infesta ambientes naturais, convertendo biomassa em estruturas biomecânicas. Nível de ameaça elevado.",
-    categoria: "Categoria D"
-  },
-     
-     {
-    titulo: "Ecorruptor E",
-    conteudo: "Infesta ambientes naturais, convertendo biomassa em estruturas biomecânicas. Nível de ameaça elevado.",
-    categoria: "Categoria E"
-  },
-];
-    let paginaAtual = 1;
-    let categoriaFiltro = 'todos';
+    const paginas = [
+      {
+        titulo: "Registro 001 - Entidade Alfa",
+        imagem: "https://via.placeholder.com/400x250?text=Entidade+Alfa",
+        texto: "Descrição detalhada da entidade Alfa. Perigosa, hostil e deve ser contida com prioridade máxima."
+      },
+      {
+        titulo: "Registro 002 - Entidade Beta",
+        imagem: "https://via.placeholder.com/400x250?text=Entidade+Beta",
+        texto: "Observações sobre a entidade Beta. Evitar contato direto. Estudos em andamento."
+      },
+      {
+        titulo: "Registro 003 - Entidade Ômega",
+        imagem: "https://via.placeholder.com/400x250?text=Entidade+Omega",
+        texto: "Entidade considerada extinta. Última manifestação registrada em 2009."
+      }
+    ];
 
-    function renderizarPosts() {
-      const inicio = (paginaAtual - 1) * postsPorPagina;
-      const filtrados = categoriaFiltro === 'todos'
-        ? posts
-        : posts.filter(p => p.categoria === categoriaFiltro);
+    let paginaAtual = 0;
 
-      const fim = inicio + postsPorPagina;
-      const visiveis = filtrados.slice(inicio, fim);
+    function renderizarPagina() {
+      const pag = paginas[paginaAtual];
+      const div = document.getElementById("pagina-atual");
+      div.classList.add("virando");
 
-      const container = document.getElementById('posts-container');
-      container.innerHTML = '';
-
-      visiveis.forEach(post => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        const categoriaClass = post.categoria.toLowerCase().replace(' ', '-');
+      setTimeout(() => {
         div.innerHTML = `
-          <span class="category ${categoriaClass}">${post.categoria}</span>
-          <h3>${post.titulo}</h3>
-          <div class="card-content"><p>${post.conteudo}</p></div>
+          <h2>${pag.titulo}</h2>
+          <img src="${pag.imagem}" alt="Imagem da entidade" onclick="ampliarImagem(this)" />
+          <p style="margin-top:20px;">${pag.texto}</p>
         `;
-        div.onclick = () => div.classList.toggle('expanded');
-        container.appendChild(div);
-      });
+        div.classList.remove("virando");
+      }, 400);
     }
 
     function renderizarPaginacao() {
-      const totalFiltrados = categoriaFiltro === 'todos'
-        ? posts.length
-        : posts.filter(p => p.categoria === categoriaFiltro).length;
+      const paginacao = document.getElementById("paginacao");
+      paginacao.innerHTML = "";
 
-      const totalPaginas = Math.ceil(totalFiltrados / postsPorPagina);
-      const paginacao = document.getElementById('pagination');
-      paginacao.innerHTML = '';
-
-      if (paginaAtual > 1) {
-        const btnAnterior = document.createElement('button');
-        btnAnterior.textContent = 'Anterior';
-        btnAnterior.onclick = () => {
-          paginaAtual--;
-          atualizar();
-        };
-        paginacao.appendChild(btnAnterior);
-      }
-
-      for (let i = 1; i <= totalPaginas; i++) {
-        const btn = document.createElement('button');
-        btn.textContent = i;
-        if (i === paginaAtual) btn.classList.add('active');
+      paginas.forEach((_, i) => {
+        const btn = document.createElement("button");
+        btn.textContent = i + 1;
+        if (i === paginaAtual) btn.classList.add("active");
         btn.onclick = () => {
           paginaAtual = i;
-          atualizar();
+          renderizarPagina();
+          renderizarPaginacao();
         };
         paginacao.appendChild(btn);
-      }
-
-      if (paginaAtual < totalPaginas) {
-        const btnProximo = document.createElement('button');
-        btnProximo.textContent = 'Próximo';
-        btnProximo.onclick = () => {
-          paginaAtual++;
-          atualizar();
-        };
-        paginacao.appendChild(btnProximo);
-      }
+      });
     }
 
-    function atualizar() {
-      renderizarPosts();
-      renderizarPaginacao();
+    function ampliarImagem(img) {
+      const overlay = document.getElementById("overlay");
+      const pagina = document.getElementById("pagina-atual");
+      overlay.style.display = "block";
+      pagina.classList.add("ampliada");
+      img.onclick = () => fecharAmpliado();
     }
 
-    function filtrar(categoria) {
-      categoriaFiltro = categoria;
-      paginaAtual = 1;
-      atualizar();
+    function fecharAmpliado() {
+      const overlay = document.getElementById("overlay");
+      overlay.style.display = "none";
+      const pagina = document.getElementById("pagina-atual");
+      pagina.classList.remove("ampliada");
+      renderizarPagina(); // volta ao estado original
     }
 
-    document.getElementById('menuToggle').addEventListener('click', () => {
-      const menu = document.getElementById('menu');
-      menu.classList.toggle('expanded');
-      const expanded = menu.classList.contains('expanded');
-      menuToggle.setAttribute('aria-label', expanded ? 'Fechar menu' : 'Abrir menu');
-    });
+    document.getElementById("overlay").onclick = fecharAmpliado;
 
-    document.addEventListener('click', (event) => {
-      const menu = document.getElementById('menu');
-      const menuToggle = document.getElementById('menuToggle');
-      if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
-        menu.classList.remove('expanded');
-        menuToggle.setAttribute('aria-label', 'Abrir menu');
-      }
-    });
-
-    atualizar();
+    renderizarPagina();
+    renderizarPaginacao();
   </script>
 </body>
 </html>
