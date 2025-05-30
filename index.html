@@ -31,28 +31,37 @@
       border-radius: 10px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.25);
       padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
     }
 
     .ficha h2 {
       margin-top: 0;
       border-bottom: 2px solid #3f2c28;
       padding-bottom: 10px;
+      font-size: 1.4em;
+      text-transform: uppercase;
     }
 
     .ficha img {
       max-width: 100%;
       border: 2px solid #3f2c28;
       border-radius: 5px;
-      margin: 15px 0;
+      margin: 0 auto;
       cursor: pointer;
     }
 
-   .descricao {
-  line-height: 1.6;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-}
-
+    .descricao {
+      background-color: #fff8e6;
+      border: 1px dashed #3f2c28;
+      padding: 15px;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      font-family: Consolas, monospace;
+      font-size: 0.95em;
+    }
 
     .overlay {
       display: none;
@@ -102,7 +111,7 @@
 
   <main>
     <div class="ficha" id="pagina-atual">
-      <!-- Conteúdo dinâmico da ficha -->
+      <!-- Conteúdo da ficha será carregado aqui -->
     </div>
 
     <div class="pagination" id="paginacao"></div>
