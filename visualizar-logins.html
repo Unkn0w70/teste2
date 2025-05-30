@@ -101,11 +101,14 @@
     </table>
     <button class="btn" onclick="carregarLogs()">🔄 Recarregar</button>
     <button class="btn clear-btn" onclick="alert('Limpeza de logs não disponível neste modo.')">🗑️ Limpar Logs</button>
+    <button class="btn" onclick="logout()">🚪 Sair</button>
   </div>
 
   <script>
     const senhaHashAutorizada = "4e2079df7800a61e3ee60dcd8a9da4ff7bf665d50e3bebdfb616de396f935956";
     const endpoint = "https://script.google.com/macros/s/AKfycbwfAl44qyRlVCHgspNahiPDo79FUs-WhVVzWVC_ejnaL26CwYh3Jw4JTxXZ-KqjCCdQ/exec";
+    const usuarioAtual = "Administrador";
+    let timeoutID;
 
     async function gerarHash(texto) {
       const encoder = new TextEncoder();
@@ -125,6 +128,8 @@
         document.getElementById("authContainer").style.display = "none";
         document.getElementById("logContainer").style.display = "block";
         carregarLogs();
+        salvarLog(usuarioAtual, "login");
+        iniciarTimeout();
       } else {
         erro.textContent = "Senha incorreta!";
       }
@@ -142,7 +147,7 @@
         method: "POST",
         body: JSON.stringify(log),
         headers: { "Content-Type": "application/json" }
-      }).then(res => console.log("Log salvo:", res.status));
+      }).then(res => console.log(`Log de ${evento} salvo.`));
     }
 
     function carregarLogs() {
@@ -175,8 +180,30 @@
         });
     }
 
-    // Exemplo: chame salvarLog() quando o usuário fizer login no sistema:
-    // salvarLog("usuarioTeste", "login");
+    function logout() {
+      salvarLog(usuarioAtual, "logout");
+      clearTimeout(timeoutID);
+      location.reload();
+    }
+
+    function iniciarTimeout() {
+      resetarTimeout();
+      document.onmousemove = resetarTimeout;
+      document.onkeydown = resetarTimeout;
+    }
+
+    function resetarTimeout() {
+      clearTimeout(timeoutID);
+      timeoutID = setTimeout(() => {
+        salvarLog(usuarioAtual, "timeout");
+        alert("Sessão expirada por inatividade.");
+        location.reload();
+      }, 10 * 60 * 1000); // 10 minutos
+    }
+
+    window.addEventListener("beforeunload", () => {
+      salvarLog(usuarioAtual, "logout");
+    });
   </script>
 </body>
 </html>
