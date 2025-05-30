@@ -3,13 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P.C.I.P. - Documentos</title>
-
+  <title>P.C.I.P. - Documento</title>
   <style>
-    /* (todo o CSS original está incluso aqui, inclusive layout, menu, etc.) */
-
-    /* Reset */
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
 
     body {
       margin: 0;
@@ -18,7 +16,10 @@
       color: #333;
     }
 
-    a { text-decoration: none; color: inherit; }
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
 
     header {
       background-color: #3f2c28;
@@ -39,7 +40,9 @@
       letter-spacing: 2px;
     }
 
-    nav { position: relative; }
+    nav {
+      position: relative;
+    }
 
     .menu-button {
       background: none;
@@ -65,13 +68,16 @@
       display: inline-block;
     }
 
-    ul.menu li:hover, ul.menu li a:hover {
+    ul.menu li:hover,
+    ul.menu li a:hover {
       background-color: #18120a;
       border-radius: 3px;
     }
 
     @media (max-width: 768px) {
-      .menu-button { display: block; }
+      .menu-button {
+        display: block;
+      }
 
       ul.menu {
         flex-direction: column;
@@ -84,7 +90,7 @@
         overflow: hidden;
         transition: max-height 0.3s ease;
         border-radius: 0 0 5px 5px;
-        box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
       }
 
       ul.menu.expanded {
@@ -95,10 +101,6 @@
       ul.menu li a {
         padding: 12px 16px;
         border-bottom: 1px solid #000000;
-      }
-
-      ul.menu li:last-child a {
-        border-bottom: none;
       }
     }
 
@@ -116,55 +118,71 @@
       font-size: 0.85rem;
     }
 
-    /* Documento tipo livro */
-    .book-container {
+    /* Virada de páginas */
+    #book-container {
       display: flex;
       justify-content: center;
-      gap: 20px;
-      align-items: center;
-      flex-wrap: wrap;
+    }
+
+    #book {
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      border: 2px solid #000;
+      background: #fff;
     }
 
     .page {
-      width: 400px;
-      height: 550px;
-      background-color: #fff8e1;
-      border: 2px solid #000;
-      box-shadow: 3px 3px 10px rgba(0,0,0,0.2);
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
       padding: 20px;
-      overflow: auto;
-      transform-origin: left;
-      transition: transform 0.6s;
-      position: relative;
-      cursor: pointer;
+      box-sizing: border-box;
+      backface-visibility: hidden;
+      transition: transform 0.8s ease;
+      transform-origin: left center;
     }
 
-    .page.zoomed {
-      transform: scale(1.6);
-      z-index: 999;
+    .page img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 6px;
     }
 
-    .nav-buttons {
-      display: flex;
-      justify-content: center;
+    .page.current {
+      z-index: 2;
+      transform: rotateY(0deg);
+    }
+
+    .page.next {
+      z-index: 1;
+      transform: rotateY(-180deg);
+    }
+
+    .controls {
+      text-align: center;
       margin-top: 20px;
-      gap: 20px;
     }
 
-    .nav-buttons button {
-      padding: 10px 20px;
-      font-size: 1rem;
-      background-color: #3f2c28;
+    .controls button {
+      background: #3f2c28;
       color: white;
       border: none;
+      padding: 10px 20px;
+      font-weight: bold;
+      margin: 0 10px;
       cursor: pointer;
       border-radius: 4px;
     }
 
-    .nav-buttons button:hover {
-      background-color: #2e1e1a;
+    .controls button:hover {
+      background-color: #2a1b18;
     }
-
   </style>
 
   <script defer>
@@ -198,96 +216,100 @@
       sessionStorage.clear();
       window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
     }
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const pages = document.querySelectorAll(".page");
-      let currentPage = 0;
-
-      function updatePages() {
-        pages.forEach((p, i) => {
-          p.style.display = i === currentPage || i === currentPage + 1 ? "block" : "none";
-        });
-      }
-
-      document.getElementById("prevBtn").onclick = () => {
-        if (currentPage > 0) {
-          currentPage -= 2;
-          updatePages();
-        }
-      };
-
-      document.getElementById("nextBtn").onclick = () => {
-        if (currentPage + 2 < pages.length) {
-          currentPage += 2;
-          updatePages();
-        }
-      };
-
-      pages.forEach(p => {
-        p.onclick = () => p.classList.toggle("zoomed");
-      });
-
-      updatePages();
-    });
   </script>
 </head>
 
 <body>
-<header>
-  <h1>P.C.I.P.</h1>
-  <nav>
-    <button aria-label="Abrir menu" class="menu-button" id="menuToggle">&#9776;</button>
-    <ul class="menu" id="menu">
-      <li><a href="https://unkn0w70.github.io/teste2/index.html">Página Inicial</a></li>
-      <li><a href="https://unkn0w70.github.io/P.C.I.P./index/introduction">Introdução</a></li>
-      <li><a href="#">Elementos</a></li>
-      <li><a href="https://unkn0w70.github.io/P.C.I.P./index/bestiary">Criaturas</a></li>
-      <li><a href="#">Estimativas Técnicas</a></li>
-      <li><a href="#">Invocação</a></li>
-      <li><a href="#">Manifestações</a></li>
-      <li><a href="https://unkn0w70.github.io/P.C.I.P./index/contact">Contato</a></li>
-      <li><a href="#" onclick="logout()">Sair</a></li>
-    </ul>
-  </nav>
-</header>
+  <header>
+    <h1>P.C.I.P.</h1>
+    <nav>
+      <button aria-label="Abrir menu" class="menu-button" id="menuToggle">&#9776;</button>
+      <ul class="menu" id="menu">
+        <li><a href="https://unkn0w70.github.io/teste2/index.html">Página Inicial</a></li>
+        <li><a href="https://unkn0w70.github.io/P.C.I.P./index/introduction">Introdução</a></li>
+        <li><a href="#">Elementos</a></li>
+        <li><a href="https://unkn0w70.github.io/P.C.I.P./index/bestiary">Criaturas</a></li>
+        <li><a href="#">Estimativas Técnicas</a></li>
+        <li><a href="#">Invocação</a></li>
+        <li><a href="#">Manifestações</a></li>
+        <li><a href="https://unkn0w70.github.io/P.C.I.P./index/contact">Contato</a></li>
+        <li><a href="#" onclick="logout()">Sair</a></li>
+      </ul>
+    </nav>
+  </header>
 
-<main>
-  <h2 class="section-title">Documento Classificado</h2>
-  <div class="book-container">
-    <div class="page">Página 1 - Introdução ao Documento</div>
-    <div class="page">Página 2 - Dados Iniciais</div>
-    <div class="page">Página 3 - Relatório de Campo</div>
-    <div class="page">Página 4 - Testemunho de Agente</div>
-    <div class="page">Página 5 - Conclusões</div>
-    <div class="page">Página 6 - Anexos Técnicos</div>
-  </div>
+  <main>
+    <div id="book-container">
+      <div id="book">
+        <div class="page current">
+          <img src="https://i.imgur.com/A0iXZxO.jpg" alt="Imagem de capa da primeira página" />
+        </div>
+        <div class="page next">
+          <img src="https://picsum.photos/800/500?random=2" alt="Página 2" />
+        </div>
+        <div class="page next">
+          <img src="https://picsum.photos/800/500?random=3" alt="Página 3" />
+        </div>
+        <!-- Adicione mais páginas aqui se quiser -->
+      </div>
+    </div>
+    <div class="controls">
+      <button onclick="previousPage()">Página Anterior</button>
+      <button onclick="nextPage()">Próxima Página</button>
+    </div>
+  </main>
 
-  <div class="nav-buttons">
-    <button id="prevBtn">Página Anterior</button>
-    <button id="nextBtn">Próxima Página</button>
-  </div>
-</main>
+  <footer>
+    <a href="https://unkn0w70.github.io/P.C.I.P./index/security" style="color: inherit; text-decoration: none;">
+      &copy; 2025 P.C.I.P. - Direitos reservados
+    </a>
+  </footer>
 
-<footer>
-  <a href="https://unkn0w70.github.io/P.C.I.P./index/security" style="color: inherit; text-decoration: none;">
-    &copy; 2025 P.C.I.P. - Direitos reservados
-  </a>
-</footer>
+  <script>
+    const book = document.getElementById("book");
+    const pages = Array.from(book.getElementsByClassName("page"));
+    let currentIndex = 0;
 
-<script>
-  const menuToggle = document.getElementById('menuToggle');
-  const menu = document.getElementById('menu');
-  menuToggle.addEventListener('click', () => {
-    menu.classList.toggle('expanded');
-    menuToggle.setAttribute('aria-label', menu.classList.contains('expanded') ? 'Fechar menu' : 'Abrir menu');
-  });
-  document.addEventListener('click', (event) => {
-    if (!menu.contains(event.target) && !menuToggle.contains(event.target)) {
-      menu.classList.remove('expanded');
-      menuToggle.setAttribute('aria-label', 'Abrir menu');
+    function updatePages() {
+      pages.forEach((page, index) => {
+        page.classList.remove("current", "next");
+        if (index === currentIndex) {
+          page.classList.add("current");
+        } else {
+          page.classList.add("next");
+        }
+      });
     }
-  });
-</script>
 
+    function nextPage() {
+      if (currentIndex < pages.length - 1) {
+        currentIndex++;
+        updatePages();
+      }
+    }
+
+    function previousPage() {
+      if (currentIndex > 0) {
+        currentIndex--;
+        updatePages();
+      }
+    }
+
+    document.getElementById('menuToggle').addEventListener('click', () => {
+      const menu = document.getElementById('menu');
+      menu.classList.toggle('expanded');
+      const expanded = menu.classList.contains('expanded');
+      menuToggle.setAttribute('aria-label', expanded ? 'Fechar menu' : 'Abrir menu');
+    });
+
+    document.addEventListener('click', (event) => {
+      const menu = document.getElementById('menu');
+      const menuToggle = document.getElementById('menuToggle');
+      if (!menu.contains(event.target) && !menuToggle.contains(event.target) && menu.classList.contains('expanded')) {
+        menu.classList.remove('expanded');
+        menuToggle.setAttribute('aria-label', 'Abrir menu');
+      }
+    });
+  </script>
 </body>
 </html>
