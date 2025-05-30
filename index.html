@@ -167,69 +167,50 @@
 
   </style>
 
-  <script defer>
-    function salvarLogDeAcesso(username, evento) {
-      const logs = JSON.parse(localStorage.getItem("logins") || "[]");
-      const novoLog = {
-        usuario: username,
+ <script defer>
+  // REGISTRA EVENTO NO GOOGLE SHEETS
+  function salvarLogGoogleSheets(usuario, evento) {
+    fetch("https://script.google.com/macros/s/AKfycbwfAl44qyRlVCHgspNahiPDo79FUs-WhVVzWVC_ejnaL26CwYh3Jw4JTxXZ-KqjCCdQ/exec", {
+      method: "POST",
+      body: JSON.stringify({
+        usuario: usuario,
         dataHora: new Date().toLocaleString(),
         navegador: navigator.userAgent,
-        evento: evento || "login"
-      };
-      logs.push(novoLog);
-      localStorage.setItem("logins", JSON.stringify(logs));
-    }
+        evento: evento
+      }),
+      headers: { "Content-Type": "application/json" }
+    }).then(res => console.log("Evento registrado:", evento));
+  }
 
+  // VERIFICA SESSÃO E EXPIRAÇÃO
+  const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
+  if (!sessao.username || Date.now() > sessao.expires) {
+    if (sessao.username) {
+      salvarLogGoogleSheets(sessao.username, "timeout");
+    }
+    sessionStorage.clear();
+    alert("Sessão expirada. Faça login novamente.");
+    window.location.href = "index2.html"; // página de login
+  }
+
+  // FUNÇÃO DE LOGOUT MANUAL
+  function logout() {
     const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
-    if (!sessao.username || Date.now() > sessao.expires) {
-      if (sessao.username) {
-        salvarLogDeAcesso(sessao.username, "timeout");
-      }
-      sessionStorage.clear();
-      alert("Sessão expirada. Faça login novamente.");
-      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
+    if (sessao.username) {
+      salvarLogGoogleSheets(sessao.username, "logout");
     }
+    sessionStorage.clear();
+    window.location.href = "index2.html";
+  }
 
-    function logout() {
-      const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
-      if (sessao.username) {
-        salvarLogDeAcesso(sessao.username, "logout");
-      }
-      sessionStorage.clear();
-      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
+  // REGISTRA logout ao fechar/atualizar aba
+  window.addEventListener("beforeunload", () => {
+    if (sessao.username) {
+      salvarLogGoogleSheets(sessao.username, "logout");
     }
+  });
+</script>
 
-    document.addEventListener("DOMContentLoaded", () => {
-      const pages = document.querySelectorAll(".page");
-      let currentPage = 0;
-
-      function updatePages() {
-        pages.forEach((p, i) => {
-          p.style.display = i === currentPage || i === currentPage + 1 ? "block" : "none";
-        });
-      }
-
-      document.getElementById("prevBtn").onclick = () => {
-        if (currentPage > 0) {
-          currentPage -= 2;
-          updatePages();
-        }
-      };
-
-      document.getElementById("nextBtn").onclick = () => {
-        if (currentPage + 2 < pages.length) {
-          currentPage += 2;
-          updatePages();
-        }
-      };
-
-      pages.forEach(p => {
-        p.onclick = () => p.classList.toggle("zoomed");
-      });
-
-      updatePages();
-    });
-  </script>
 </head>
 
 <body>
