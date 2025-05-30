@@ -5,10 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Documento | P.C.I.P.</title>
   <style>
-    /* Estilos básicos reaproveitados */
     body {
       margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       background-color: #d1b082;
       color: #333;
     }
@@ -23,48 +22,33 @@
     main {
       max-width: 800px;
       margin: 30px auto;
-      padding: 15px;
-      perspective: 1200px;
-    }
-
-    .documento-container {
-      position: relative;
-      width: 100%;
-      height: 500px;
-      background: white;
-      border-radius: 10px;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-      overflow: hidden;
-      transition: transform 1s;
-      transform-style: preserve-3d;
-    }
-
-    .pagina {
-      position: absolute;
-      width: 100%;
-      height: 100%;
       padding: 20px;
-      backface-visibility: hidden;
-      overflow-y: auto;
     }
 
-    .pagina img {
+    .ficha {
+      background-color: #fdfaf5;
+      border: 3px solid #3f2c28;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      padding: 20px;
+    }
+
+    .ficha h2 {
+      margin-top: 0;
+      border-bottom: 2px solid #3f2c28;
+      padding-bottom: 10px;
+    }
+
+    .ficha img {
       max-width: 100%;
-      cursor: pointer;
       border: 2px solid #3f2c28;
       border-radius: 5px;
+      margin: 15px 0;
+      cursor: pointer;
     }
 
-    .pagina.ampliada img {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      max-width: 90vw;
-      max-height: 90vh;
-      transform: translate(-50%, -50%);
-      z-index: 1001;
-      border: 4px solid white;
-      box-shadow: 0 0 20px rgba(0,0,0,0.7);
+    .descricao {
+      line-height: 1.6;
     }
 
     .overlay {
@@ -74,6 +58,18 @@
       width: 100vw; height: 100vh;
       background: rgba(0,0,0,0.6);
       z-index: 1000;
+    }
+
+    .ficha.ampliada img {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      max-width: 90vw;
+      max-height: 90vh;
+      transform: translate(-50%, -50%);
+      z-index: 1001;
+      border: 4px solid white;
+      box-shadow: 0 0 20px rgba(0,0,0,0.8);
     }
 
     .pagination {
@@ -94,16 +90,6 @@
     .pagination button.active {
       background-color: #000;
     }
-
-    /* Animação de virada */
-    .virando {
-      animation: virar 0.8s ease-in-out;
-    }
-
-    @keyframes virar {
-      0% { transform: rotateY(0deg); }
-      100% { transform: rotateY(360deg); }
-    }
   </style>
 </head>
 <body>
@@ -112,10 +98,8 @@
   </header>
 
   <main>
-    <div class="documento-container" id="documento">
-      <div class="pagina" id="pagina-atual">
-        <!-- Conteúdo dinâmico aqui -->
-      </div>
+    <div class="ficha" id="pagina-atual">
+      <!-- Conteúdo dinâmico da ficha -->
     </div>
 
     <div class="pagination" id="paginacao"></div>
@@ -130,19 +114,19 @@
   <script>
     const paginas = [
       {
-        titulo: "Registro 001 - Entidade Alfa",
-        imagem: "https://via.placeholder.com/400x250?text=Entidade+Alfa",
-        texto: "Descrição detalhada da entidade Alfa. Perigosa, hostil e deve ser contida com prioridade máxima."
+        titulo: "FICHA 001 - Entidade Alfa",
+        imagem: "https://via.placeholder.com/600x300?text=Entidade+Alfa",
+        texto: "Nome de Código: ALFA-001\nNível de Ameaça: CRÍTICO\nResumo: Entidade altamente hostil com histórico de massacres. Recomenda-se extermínio imediato ao ser detectada. Observada pela última vez em zona de quarentena nível 5."
       },
       {
-        titulo: "Registro 002 - Entidade Beta",
-        imagem: "https://via.placeholder.com/400x250?text=Entidade+Beta",
-        texto: "Observações sobre a entidade Beta. Evitar contato direto. Estudos em andamento."
+        titulo: "FICHA 002 - Entidade Beta",
+        imagem: "https://via.placeholder.com/600x300?text=Entidade+Beta",
+        texto: "Nome de Código: BETA-042\nNível de Ameaça: MODERADO\nResumo: Entidade não-letal que apresenta comportamento errático. Interações devem ser limitadas a observação remota. Contenção possível mediante distração com estímulos sonoros."
       },
       {
-        titulo: "Registro 003 - Entidade Ômega",
-        imagem: "https://via.placeholder.com/400x250?text=Entidade+Omega",
-        texto: "Entidade considerada extinta. Última manifestação registrada em 2009."
+        titulo: "FICHA 003 - Entidade Ômega",
+        imagem: "https://via.placeholder.com/600x300?text=Entidade+Omega",
+        texto: "Nome de Código: OMEGA-Z\nNível de Ameaça: DESCONHECIDO\nResumo: Entidade de origem incerta. Única aparição registrada em 2009. Fenômenos colaterais ainda são investigados. Nenhuma evidência concreta desde então."
       }
     ];
 
@@ -151,16 +135,11 @@
     function renderizarPagina() {
       const pag = paginas[paginaAtual];
       const div = document.getElementById("pagina-atual");
-      div.classList.add("virando");
-
-      setTimeout(() => {
-        div.innerHTML = `
-          <h2>${pag.titulo}</h2>
-          <img src="${pag.imagem}" alt="Imagem da entidade" onclick="ampliarImagem(this)" />
-          <p style="margin-top:20px;">${pag.texto}</p>
-        `;
-        div.classList.remove("virando");
-      }, 400);
+      div.innerHTML = `
+        <h2>${pag.titulo}</h2>
+        <img src="${pag.imagem}" alt="Imagem da entidade" onclick="ampliarImagem(this)" />
+        <div class="descricao"><pre>${pag.texto}</pre></div>
+      `;
     }
 
     function renderizarPaginacao() {
@@ -182,18 +161,18 @@
 
     function ampliarImagem(img) {
       const overlay = document.getElementById("overlay");
-      const pagina = document.getElementById("pagina-atual");
+      const ficha = document.getElementById("pagina-atual");
       overlay.style.display = "block";
-      pagina.classList.add("ampliada");
+      ficha.classList.add("ampliada");
       img.onclick = () => fecharAmpliado();
     }
 
     function fecharAmpliado() {
       const overlay = document.getElementById("overlay");
       overlay.style.display = "none";
-      const pagina = document.getElementById("pagina-atual");
-      pagina.classList.remove("ampliada");
-      renderizarPagina(); // volta ao estado original
+      const ficha = document.getElementById("pagina-atual");
+      ficha.classList.remove("ampliada");
+      renderizarPagina();
     }
 
     document.getElementById("overlay").onclick = fecharAmpliado;
