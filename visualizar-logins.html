@@ -100,11 +100,12 @@
       <tbody></tbody>
     </table>
     <button class="btn" onclick="carregarLogs()">🔄 Recarregar</button>
-    <button class="btn clear-btn" onclick="limparLogs()">🗑️ Limpar Logs</button>
+    <button class="btn clear-btn" onclick="alert('Limpeza de logs não disponível neste modo.')">🗑️ Limpar Logs</button>
   </div>
 
   <script>
     const senhaHashAutorizada = "4e2079df7800a61e3ee60dcd8a9da4ff7bf665d50e3bebdfb616de396f935956";
+    const endpoint = "https://script.google.com/macros/s/AKfycbwfAl44qyRlVCHgspNahiPDo79FUs-WhVVzWVC_ejnaL26CwYh3Jw4JTxXZ-KqjCCdQ/exec";
 
     async function gerarHash(texto) {
       const encoder = new TextEncoder();
@@ -129,36 +130,53 @@
       }
     }
 
+    function salvarLog(usuario, evento = "login") {
+      const log = {
+        usuario: usuario,
+        dataHora: new Date().toLocaleString(),
+        navegador: navigator.userAgent,
+        evento: evento
+      };
+
+      fetch(endpoint, {
+        method: "POST",
+        body: JSON.stringify(log),
+        headers: { "Content-Type": "application/json" }
+      }).then(res => console.log("Log salvo:", res.status));
+    }
+
     function carregarLogs() {
-      const logs = JSON.parse(localStorage.getItem("logins") || "[]");
-      const tbody = document.querySelector("#logTable tbody");
-      tbody.innerHTML = "";
+      fetch(endpoint)
+        .then(res => res.json())
+        .then(logs => {
+          const tbody = document.querySelector("#logTable tbody");
+          tbody.innerHTML = "";
 
-      if (logs.length === 0) {
-        const row = document.createElement("tr");
-        row.innerHTML = `<td colspan="4" style="text-align:center;">Nenhum log encontrado.</td>`;
-        tbody.appendChild(row);
-        return;
-      }
+          if (!logs || logs.length === 0) {
+            const row = document.createElement("tr");
+            row.innerHTML = `<td colspan="4" style="text-align:center;">Nenhum log encontrado.</td>`;
+            tbody.appendChild(row);
+            return;
+          }
 
-      logs.forEach(log => {
-        const row = document.createElement("tr");
-        row.innerHTML = `
-          <td>${log.usuario}</td>
-          <td>${log.dataHora}</td>
-          <td>${log.navegador}</td>
-          <td>${log.evento || "login"}</td>
-        `;
-        tbody.appendChild(row);
-      });
+          logs.forEach(log => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+              <td>${log["Usuário"]}</td>
+              <td>${log["DataHora"]}</td>
+              <td>${log["Navegador"]}</td>
+              <td>${log["Evento"]}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        })
+        .catch(err => {
+          console.error("Erro ao carregar logs:", err);
+        });
     }
 
-    function limparLogs() {
-      if (confirm("Tem certeza que deseja apagar todos os logs?")) {
-        localStorage.removeItem("logins");
-        carregarLogs();
-      }
-    }
+    // Exemplo: chame salvarLog() quando o usuário fizer login no sistema:
+    // salvarLog("usuarioTeste", "login");
   </script>
 </body>
 </html>
