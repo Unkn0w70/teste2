@@ -47,9 +47,12 @@
       cursor: pointer;
     }
 
-    .descricao {
-      line-height: 1.6;
-    }
+   .descricao {
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
 
     .overlay {
       display: none;
@@ -138,7 +141,7 @@
       div.innerHTML = `
         <h2>${pag.titulo}</h2>
         <img src="${pag.imagem}" alt="Imagem da entidade" onclick="ampliarImagem(this)" />
-        <div class="descricao"><pre>${pag.texto}</pre></div>
+        <div class="descricao">${pag.texto}</div>
       `;
     }
 
