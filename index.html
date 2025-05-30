@@ -1,167 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>P.C.I.P. - Documento</title>
+  <meta charset="UTF-8">
+  <title>Documento P.C.I.P.</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
-
     body {
+      background: #d1b082;
       margin: 0;
-      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #d1b082;
-      color: #333;
+      font-family: sans-serif;
     }
 
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    header {
-      background-color: #3f2c28;
-      color: white;
-      padding: 12px 20px;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    header h1 {
-      font-weight: 700;
-      margin: 0;
-      font-size: 1.5rem;
-      letter-spacing: 2px;
-    }
-
-    nav {
-      position: relative;
-    }
-
-    .menu-button {
-      background: none;
-      border: none;
-      color: white;
-      font-size: 1.6rem;
-      cursor: pointer;
-      display: none;
-    }
-
-    ul.menu {
-      list-style: none;
-      display: flex;
-      gap: 20px;
-      margin: 0;
-      padding: 0;
-      user-select: none;
-    }
-
-    ul.menu li a {
-      font-weight: 600;
-      padding: 8px 6px;
-      display: inline-block;
-    }
-
-    ul.menu li:hover,
-    ul.menu li a:hover {
-      background-color: #18120a;
-      border-radius: 3px;
-    }
-
-    @media (max-width: 768px) {
-      .menu-button {
-        display: block;
-      }
-
-      ul.menu {
-        flex-direction: column;
-        background-color: #3f2c28;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        width: 200px;
-        max-height: 0;
-        overflow: hidden;
-        transition: max-height 0.3s ease;
-        border-radius: 0 0 5px 5px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-
-      ul.menu.expanded {
-        max-height: 500px;
-        overflow-y: auto;
-      }
-
-      ul.menu li a {
-        padding: 12px 16px;
-        border-bottom: 1px solid #000000;
-      }
-    }
-
-    main {
-      max-width: 1100px;
-      margin: 20px auto 40px;
-      padding: 0 15px;
-    }
-
-    footer {
-      background-color: #222;
-      color: #ccc;
-      text-align: center;
-      padding: 15px 10px;
-      font-size: 0.85rem;
-    }
-
-    /* Virada de páginas */
     #book-container {
       display: flex;
       justify-content: center;
+      align-items: center;
+      min-height: 90vh;
     }
 
     #book {
-      width: 90%;
-      max-width: 800px;
+      width: 800px;
       height: 500px;
-      margin: 0 auto;
+      perspective: 2000px;
       position: relative;
-      overflow: hidden;
-      border: 2px solid #000;
-      background: #fff;
     }
 
     .page {
-      position: absolute;
       width: 100%;
       height: 100%;
-      background: #fff;
+      background: #f8f1e4;
+      border: 2px solid #000;
+      border-radius: 6px;
+      position: absolute;
+      transition: transform 0.6s ease;
+      transform-origin: left;
+      overflow: hidden;
       padding: 20px;
       box-sizing: border-box;
-      backface-visibility: hidden;
-      transition: transform 0.8s ease;
-      transform-origin: left center;
     }
 
     .page img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      border-radius: 6px;
+      border-radius: 4px;
     }
 
-    .page.current {
-      z-index: 2;
-      transform: rotateY(0deg);
-    }
-
-    .page.next {
-      z-index: 1;
-      transform: rotateY(-180deg);
+    .page.hidden {
+      display: none;
     }
 
     .controls {
@@ -184,132 +69,57 @@
       background-color: #2a1b18;
     }
   </style>
-
-  <script defer>
-    function salvarLogDeAcesso(username, evento) {
-      const logs = JSON.parse(localStorage.getItem("logins") || "[]");
-      const novoLog = {
-        usuario: username,
-        dataHora: new Date().toLocaleString(),
-        navegador: navigator.userAgent,
-        evento: evento || "login"
-      };
-      logs.push(novoLog);
-      localStorage.setItem("logins", JSON.stringify(logs));
-    }
-
-    const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
-    if (!sessao.username || Date.now() > sessao.expires) {
-      if (sessao.username) {
-        salvarLogDeAcesso(sessao.username, "timeout");
-      }
-      sessionStorage.clear();
-      alert("Sessão expirada. Faça login novamente.");
-      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
-    }
-
-    function logout() {
-      const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
-      if (sessao.username) {
-        salvarLogDeAcesso(sessao.username, "logout");
-      }
-      sessionStorage.clear();
-      window.location.href = "https://unkn0w70.github.io/teste2/index2.html";
-    }
-  </script>
 </head>
-
 <body>
-  <header>
-    <h1>P.C.I.P.</h1>
-    <nav>
-      <button aria-label="Abrir menu" class="menu-button" id="menuToggle">&#9776;</button>
-      <ul class="menu" id="menu">
-        <li><a href="https://unkn0w70.github.io/teste2/index.html">Página Inicial</a></li>
-        <li><a href="https://unkn0w70.github.io/P.C.I.P./index/introduction">Introdução</a></li>
-        <li><a href="#">Elementos</a></li>
-        <li><a href="https://unkn0w70.github.io/P.C.I.P./index/bestiary">Criaturas</a></li>
-        <li><a href="#">Estimativas Técnicas</a></li>
-        <li><a href="#">Invocação</a></li>
-        <li><a href="#">Manifestações</a></li>
-        <li><a href="https://unkn0w70.github.io/P.C.I.P./index/contact">Contato</a></li>
-        <li><a href="#" onclick="logout()">Sair</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <main>
-    <div id="book-container">
-      <div id="book">
-        <div class="page current">
-          <img src="https://i.imgur.com/A0iXZxO.jpg" alt="Imagem de capa da primeira página" />
-        </div>
-        <div class="page next">
-          <img src="https://picsum.photos/800/500?random=2" alt="Página 2" />
-        </div>
-        <div class="page next">
-          <img src="https://picsum.photos/800/500?random=3" alt="Página 3" />
-        </div>
-        <!-- Adicione mais páginas aqui se quiser -->
+  <div id="book-container">
+    <div id="book">
+      <div class="page" id="page0">
+        <img src="https://i.imgur.com/A0iXZxO.jpg" alt="Imagem da primeira página">
       </div>
+      <div class="page hidden" id="page1">
+        <p>Texto da página 2. Você pode adicionar o conteúdo completo aqui, com parágrafos, títulos e muito mais.</p>
+      </div>
+      <div class="page hidden" id="page2">
+        <p>Texto da página 3. Continue inserindo conteúdo conforme desejar.</p>
+      </div>
+      <!-- Adicione mais páginas aqui -->
     </div>
-    <div class="controls">
-      <button onclick="previousPage()">Página Anterior</button>
-      <button onclick="nextPage()">Próxima Página</button>
-    </div>
-  </main>
+  </div>
 
-  <footer>
-    <a href="https://unkn0w70.github.io/P.C.I.P./index/security" style="color: inherit; text-decoration: none;">
-      &copy; 2025 P.C.I.P. - Direitos reservados
-    </a>
-  </footer>
+  <div class="controls">
+    <button onclick="previousPage()">Página Anterior</button>
+    <button onclick="nextPage()">Próxima Página</button>
+  </div>
 
   <script>
-    const book = document.getElementById("book");
-    const pages = Array.from(book.getElementsByClassName("page"));
-    let currentIndex = 0;
+    let currentPage = 0;
+    const pages = document.querySelectorAll(".page");
 
-    function updatePages() {
-      pages.forEach((page, index) => {
-        page.classList.remove("current", "next");
-        if (index === currentIndex) {
-          page.classList.add("current");
-        } else {
-          page.classList.add("next");
+    function showPage(index) {
+      pages.forEach((page, i) => {
+        page.classList.add("hidden");
+        if (i === index) {
+          page.classList.remove("hidden");
         }
       });
     }
 
     function nextPage() {
-      if (currentIndex < pages.length - 1) {
-        currentIndex++;
-        updatePages();
+      if (currentPage < pages.length - 1) {
+        currentPage++;
+        showPage(currentPage);
       }
     }
 
     function previousPage() {
-      if (currentIndex > 0) {
-        currentIndex--;
-        updatePages();
+      if (currentPage > 0) {
+        currentPage--;
+        showPage(currentPage);
       }
     }
 
-    document.getElementById('menuToggle').addEventListener('click', () => {
-      const menu = document.getElementById('menu');
-      menu.classList.toggle('expanded');
-      const expanded = menu.classList.contains('expanded');
-      menuToggle.setAttribute('aria-label', expanded ? 'Fechar menu' : 'Abrir menu');
-    });
-
-    document.addEventListener('click', (event) => {
-      const menu = document.getElementById('menu');
-      const menuToggle = document.getElementById('menuToggle');
-      if (!menu.contains(event.target) && !menuToggle.contains(event.target) && menu.classList.contains('expanded')) {
-        menu.classList.remove('expanded');
-        menuToggle.setAttribute('aria-label', 'Abrir menu');
-      }
-    });
+    // Mostrar a primeira página ao carregar
+    showPage(currentPage);
   </script>
 </body>
 </html>
