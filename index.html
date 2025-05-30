@@ -167,48 +167,41 @@
 
   </style>
 
- <script defer>
-  // REGISTRA EVENTO NO GOOGLE SHEETS
-  function salvarLogGoogleSheets(usuario, evento) {
-    fetch("https://script.google.com/macros/s/AKfycbwfAl44qyRlVCHgspNahiPDo79FUs-WhVVzWVC_ejnaL26CwYh3Jw4JTxXZ-KqjCCdQ/exec", {
+<script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbwfAl44qyRlVCHgspNahiPDo79FUs-WhVVzWVC_ejnaL26CwYh3Jw4JTxXZ-KqjCCdQ/exec";
+
+  function registrarEvento(usuario, evento) {
+    fetch(scriptURL, {
       method: "POST",
       body: JSON.stringify({
-        usuario: usuario,
-        dataHora: new Date().toLocaleString(),
-        navegador: navigator.userAgent,
-        evento: evento
+        usuario,
+        evento,
+        navegador: navigator.userAgent
       }),
-      headers: { "Content-Type": "application/json" }
-    }).then(res => console.log("Evento registrado:", evento));
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
   }
 
-  // VERIFICA SESSÃO E EXPIRAÇÃO
   const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
   if (!sessao.username || Date.now() > sessao.expires) {
     if (sessao.username) {
-      salvarLogGoogleSheets(sessao.username, "timeout");
+      registrarEvento(sessao.username, "timeout");
     }
     sessionStorage.clear();
     alert("Sessão expirada. Faça login novamente.");
-    window.location.href = "index2.html"; // página de login
+    window.location.href = "/login.html"; // ajuste se necessário
   }
 
-  // FUNÇÃO DE LOGOUT MANUAL
   function logout() {
     const sessao = JSON.parse(sessionStorage.getItem("usuarioLogado") || "{}");
     if (sessao.username) {
-      salvarLogGoogleSheets(sessao.username, "logout");
+      registrarEvento(sessao.username, "logout");
     }
     sessionStorage.clear();
-    window.location.href = "index2.html";
+    window.location.href = "/login.html";
   }
-
-  // REGISTRA logout ao fechar/atualizar aba
-  window.addEventListener("beforeunload", () => {
-    if (sessao.username) {
-      salvarLogGoogleSheets(sessao.username, "logout");
-    }
-  });
 </script>
 
 </head>
