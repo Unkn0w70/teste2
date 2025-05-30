@@ -80,7 +80,6 @@
   </div>
 
   <script>
-    // Lista de usuários com senha já criptografada (SHA-256 em hexadecimal)
     const users = [
       {
         username: "Ricardo Ramirèz",
@@ -118,12 +117,11 @@
       const user = users.find(u => u.username === username && u.passwordHash === passwordHash);
 
       if (user) {
-        salvarLogDeAcesso(username);
+        salvarLogDeAcesso(username, "login");
 
-        // Salvar sessão com validade de 30 minutos
         const sessionData = {
           username: user.username,
-          expires: Date.now() + 1 * 60 * 1000
+          expires: Date.now() + 30 * 60 * 1000 // 30 minutos
         };
         sessionStorage.setItem("usuarioLogado", JSON.stringify(sessionData));
 
@@ -133,17 +131,21 @@
       }
     }
 
-    function salvarLogDeAcesso(username) {
-      const logs = JSON.parse(localStorage.getItem("logins") || "[]");
-
-      const novoLog = {
-        usuario: username,
-        dataHora: new Date().toLocaleString(),
-        navegador: navigator.userAgent
-      };
-
-      logs.push(novoLog);
-      localStorage.setItem("logins", JSON.stringify(logs));
+    function salvarLogDeAcesso(username, evento = "login") {
+      fetch("https://script.google.com/macros/s/AKfycbwfAl44qyRlVCHgspNahiPDo79FUs-WhVVzWVC_ejnaL26CwYh3Jw4JTxXZ-KqjCCdQ/exec", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          usuario: username,
+          dataHora: new Date().toLocaleString(),
+          navegador: navigator.userAgent,
+          evento: evento
+        })
+      }).then(response => {
+        console.log("Log enviado para o Google Sheets:", evento, username);
+      }).catch(err => {
+        console.error("Erro ao enviar log para o Google Sheets:", err);
+      });
     }
   </script>
 </body>
